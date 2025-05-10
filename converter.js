@@ -69,7 +69,7 @@ class TextConverter {
             arguments: {
               URL: {
                 type: Scratch.ArgumentType.STRING,
-                defaultValue: 'https://example.com/image.png'
+                defaultValue: 'https://ramen-umai.github.io/rte/converter.js'
               },
               MIMETYPE: {
                 type: Scratch.ArgumentType.STRING,

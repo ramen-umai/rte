@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>fetch+ 拡張機能 ドキュメント</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      line-height: 1.6;
+      padding: 2em;
+      background: #f9f9f9;
+      color: #333;
+    }
+    code, pre {
+      background: #eee;
+      padding: 0.2em 0.4em;
+      border-radius: 4px;
+    }
+    table {
+      border-collapse: collapse;
+      width: 100%;
+    }
+    th, td {
+      border: 1px solid #ccc;
+      padding: 0.5em;
+    }
+    th {
+      background-color: #f0f0f0;
+    }
+  </style>
+</head>
+<body>
+<h1>fetch+ 拡張機能 ドキュメント</h1>
+
+<h2>概要</h2>
+<p><strong>fetch+</strong> は turbowarpなどのカスタム拡張機能です。プログラムから HTTP リクエスト（GET/POST/PUT/DELETE）を非同期で送信し、レスポンスを取得することができます。</p>
+
+<h2>利用できるブロック</h2>
+<h3>🔷 <code>[URL] に [METHOD] リクエスト、本文 [BODY]、形式 [FORMAT]</code></h3>
+<p>HTTP リクエストを送信して、レスポンスを返すブロックです。（レポーターブロック）</p>
+
+<h2>使い方</h2>
+    <p>
+    簡単に説明すると、
+    ブロックに「URL・方法・本文・形式」を入れるだけで、
+    Webからデータが取れる or 送れる！
+    ということです
+    </p>
+
+<h4>引数一覧</h4>
+<table>
+  <thead>
+    <tr>
+      <th>引数名</th>
+      <th>内容</th>
+      <th>例</th>
+      <th>必須</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>URL</td>
+      <td>リクエスト先のURL</td>
+      <td>https://api.example.com/data</td>
+      <td>✅</td>
+    </tr>
+    <tr>
+      <td>METHOD</td>
+      <td>HTTPメソッド</td>
+      <td>GET, POST, PUT, DELETE</td>
+      <td>✅</td>
+    </tr>
+    <tr>
+      <td>BODY</td>
+      <td>送信する本文（JSONやテキスト）</td>
+      <td>{"name": "ChatGPT"}</td>
+      <td>任意</td>
+    </tr>
+    <tr>
+      <td>FORMAT</td>
+      <td>レスポンスの形式</td>
+      <td>text または json</td>
+      <td>✅</td>
+    </tr>
+  </tbody>
+</table>
+
+<h4>返り値</h4>
+<ul>
+  <li>FORMAT が text の場合：文字列</li>
+  <li>FORMAT が json の場合：オブジェクトや配列（自動で文字列化）</li>
+  <li>エラー時は <code>fetch エラー: メッセージ</code> を返します</li>
+</ul>
+
+<h2>例：GET リクエスト</h2>
+<pre><code>
+URL: https://jsonplaceholder.typicode.com/posts/1
+METHOD: GET
+BODY: （空でOK）
+FORMAT: json
+</code></pre>
+<p>取得される JSON:</p>
+<pre><code>{
+  "userId": 1,
+  "id": 1,
+  "title": "...",
+  "body": "..."
+}</code></pre>
+
+<h2>例：POST リクエスト</h2>
+<pre><code>
+URL: https://jsonplaceholder.typicode.com/posts
+METHOD: POST
+BODY: {"title": "Hello", "body": "World"}
+FORMAT: json
+</code></pre>
+
+<h2>注意点</h2>
+<ul>
+  <li>POST, PUT では BODY に JSON 文字列を正しく記述してください。</li>
+  <li>CORS や認証が必要な API には注意が必要です。</li>
+  <li>TurboWarp 側で await を扱うには非同期ブロックである必要があります（対応済み）。</li>
+</ul>
+
+<h2>今後追加予定（あくまで予定）</h2>
+<ul>
+  <li>認証ヘッダー対応（Bearer トークンなど）</li>
+  <li>レスポンスの特定キー抽出ブロック</li>
+  <li>複数 URL の並列 fetch</li>
+</ul>
+
+<h2>まとめ</h2>
+<p>
+  fetch+ は TurboWarp 上で HTTP 通信を可能にする強力な拡張機能です。Scratch 環境のまま外部 API と連携できることで、データの取得・送信などの表現が大きく広がります。
+  拡張はインストールが簡単で、GET や POST リクエストに加え、JSONレスポンスにも対応しています。今後、認証対応や応答データの抽出など、より高度な機能も追加予定です。
+  ぜひ活用してみてください。
+</p>
+
+<h2>ドキュメント制作者</h2>
+<p>Code Copilot</p>
+
+</body>
+</html>

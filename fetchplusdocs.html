@@ -43,40 +43,57 @@
       border-left: 5px solid #2196f3;
       margin-bottom: 1em;
     }
+
+    ul {
+      padding-left: 1.2em;
+    }
   </style>
 </head>
 <body>
   <h1>fetch+ 拡張機能ドキュメント</h1>
-  <p>これは TurboWarp / PenguinMod 用の <strong>fetch+</strong> 拡張機能です。ネット上のデータを取得して Scratch プログラムで使えるようにします。</p>
+  <p>
+    <strong>fetch+</strong> は TurboWarp や PenguinMod で HTTPリクエスト（Webアクセス）を使えるようにする拡張機能です。
+  </p>
 
-  <h2>🚀 使い方</h2>
+  <h2>🔗 追加方法</h2>
   <ol>
-    <li><a href="https://turbowarp.org/" target="_blank">TurboWarp</a> で Scratch プロジェクトを開く</li>
+    <li><a href="https://turbowarp.org" target="_blank">TurboWarp</a> でプロジェクトを開く</li>
     <li>「拡張機能を追加」→「URLから読み込む」</li>
-    <li>以下の URL を貼り付けて「追加」</li>
+    <li>以下のURLを貼り付けて「追加」</li>
   </ol>
 
-  <pre><code id="url">https://yourname.github.io/fetchplus.js</code><button class="copy-btn" onclick="copyURL()">コピー</button></pre>
+  <pre><code id="url">https://ramen-umai.github.io/rte/fetchplus.js</code><button class="copy-btn" onclick="copyURL()">コピー</button></pre>
 
-  <h2>🧱 ブロックの説明</h2>
+  <h2>🧱 ブロック一覧と説明</h2>
 
   <div class="block">
     <strong>GET テキスト [URL]</strong><br>
-    指定したURLにアクセスし、テキストデータを返します。
+    指定したURLからプレーンテキスト（HTMLや文章など）を取得して返します。
   </div>
 
   <div class="block">
-    <strong>GET JSON [URL]</strong><br>
-    指定したURLにアクセスし、JSONを読み取ってScratchで使える形にします（リストや変数など）。
+    <strong>GET JSONキー [KEY] の値 (URL: [URL])</strong><br>
+    JSONデータから、指定したキー（例：<code>bitcoin.usd</code>）の中身だけを取り出して返します。<br>
+    <em>ネスト（入れ子）したキーはピリオド <code>.</code> で区切ります。</em>
   </div>
 
-  <h2>📦 使用例</h2>
-  <p>例：<code>https://api.coindesk.com/v1/bpi/currentprice.json</code> を使うと、ビットコインの最新価格を取得できます。</p>
+  <h2>💡 使用例</h2>
 
-  <h2>💡 注意</h2>
+  <p>
+    ビットコインの価格を取得する例：
+  </p>
+  <pre><code>URL:
+https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=usd
+
+KEY:
+bitcoin.usd</code></pre>
+  <p>→ 結果：「61659」など（現在のUSD価格）</p>
+
+  <h2>⚠ 注意点</h2>
   <ul>
-    <li>アクセス先がCORS制限をしていると取得できません。</li>
-    <li>データが大きい場合、読み取りに時間がかかることがあります。</li>
+    <li>多くのAPIは <strong>CORS（コース）制限</strong> があります。制限されているとエラーになる場合があります。</li>
+    <li>データが大きいと時間がかかるので、<strong>一時停止ブロック</strong>を使うと良いです。</li>
+    <li>JSONのキーが存在しない場合、「キーが見つかりません」と表示されます。</li>
   </ul>
 
   <script>

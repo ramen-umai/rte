@@ -1,54 +1,71 @@
 class FetchPlus {
-  getInfo() {
-    return {
-      id: 'fetchplus',
-      name: 'fetch+',
-      color1: '#4b8bbe',
-      color2: '#306998',
-      blocks: [
-        {
-          opcode: 'getText',
-          blockType: Scratch.BlockType.REPORTER,
-          text: 'GET テキスト [URL]',
-          arguments: {
-            URL: {
-              type: Scratch.ArgumentType.STRING,
-              defaultValue: 'https://example.com'
+    getInfo() {
+      return {
+        id: 'fetchplus',
+        name: 'fetch+',
+        color1: '#4b8bbe',
+        color2: '#306998',
+        docsURI: 'https://ramen-umai.github.io/rte/fetchplusdocs.html',
+        blocks: [
+          {
+            opcode: 'getText',
+            blockType: Scratch.BlockType.REPORTER,
+            text: 'GET TEXT [URL]',
+            arguments: {
+              URL: {
+                type: Scratch.ArgumentType.STRING,
+                defaultValue: 'https://ramen-umai.github.io/rte/fetchplus.js'
+              }
+            }
+          },
+          {
+            opcode: 'getJSONValue',
+            blockType: Scratch.BlockType.REPORTER,
+            text: 'GET JSON URL: [URL] キー [KEY] の値',
+            arguments: {
+              KEY: {
+                type: Scratch.ArgumentType.STRING,
+                defaultValue: 'bitcoin.usd'
+              },
+              URL: {
+                type: Scratch.ArgumentType.STRING,
+                defaultValue: 'https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=usd'
+              }
             }
           }
-        },
-        {
-          opcode: 'getJSON',
-          blockType: Scratch.BlockType.REPORTER,
-          text: 'GET JSON [URL]',
-          arguments: {
-            URL: {
-              type: Scratch.ArgumentType.STRING,
-              defaultValue: 'https://api.example.com/data'
-            }
+        ]
+      };
+    }
+  
+    async getText(args) {
+      try {
+        const res = await fetch(args.URL);
+        return await res.text();
+      } catch (e) {
+        return 'Error: ' + e.message;
+      }
+    }
+  
+    async getJSONValue(args) {
+      try {
+        const res = await fetch(args.URL);
+        const data = await res.json();
+  
+        const keys = args.KEY.split('.');
+        let result = data;
+        for (const key of keys) {
+          if (result && typeof result === 'object' && key in result) {
+            result = result[key];
+          } else {
+            return 'キーが見つかりません';
           }
         }
-      ]
-    };
-  }
-
-  async getText(args) {
-    try {
-      const res = await fetch(args.URL);
-      return await res.text();
-    } catch (e) {
-      return 'Error: ' + e.message;
+        return typeof result === 'object' ? JSON.stringify(result) : result;
+      } catch (e) {
+        return 'エラー: ' + e.message;
+      }
     }
   }
-
-  async getJSON(args) {
-    try {
-      const res = await fetch(args.URL);
-      return await res.json();
-    } catch (e) {
-      return { error: e.message };
-    }
-  }
-}
-
-Scratch.extensions.register(new FetchPlus());
+  
+  Scratch.extensions.register(new FetchPlus());
+  
